@@ -8,6 +8,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.springframework.beans.factory.annotation.Value;
+
+
+
 @Entity
 @Table(name = "players")
 public class Player { // extends AuditModel
@@ -26,6 +30,7 @@ public class Player { // extends AuditModel
 
    // @NotNull
    // @Size(max = 100)
+    
     @Column(unique = true)
     private String name;
     
@@ -33,6 +38,7 @@ public class Player { // extends AuditModel
 
 	private LocalDateTime createdAt;
 
+	boolean hasGames = false;
     
 	public Player(String name) {
 		this.id = COUNTER;
@@ -73,6 +79,14 @@ public class Player { // extends AuditModel
 
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public boolean isHasGames() {
+		return hasGames;
+	}
+
+	public void setHasGames(boolean hasGames) {
+		this.hasGames = hasGames;
 	}
 
 

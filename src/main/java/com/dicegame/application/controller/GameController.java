@@ -3,6 +3,7 @@ package com.dicegame.application.controller;
 
 import com.dicegame.application.exception.ResourceNotFoundException;
 import com.dicegame.application.domain.Game;
+import com.dicegame.application.domain.Player;
 import com.dicegame.application.persistence.GameRepository;
 import com.dicegame.application.persistence.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -38,6 +40,7 @@ public class GameController {
 		
         return playerRepository.findById(playerId).map(player -> {
             game.setPlayer(player);
+          
             int dice1 = (@NotNull int) Math.floor(Math.random()*6+1);
             int dice2 = (@NotNull int) Math.floor(Math.random()*6+1);
             game.setDice1(dice1);
@@ -76,6 +79,8 @@ public class GameController {
           //  picture.setAuthor("ANONYMOUS");
           //  };
           //  shop.setNumPictures(shop.getNumPictures()+1);
+     	player.setHasGames(true); 
+     	
             return gameRepository.save(game);
         }).orElseThrow(() -> new ResourceNotFoundException("PlayerId " + playerId + " not found"));
 		
@@ -102,13 +107,16 @@ public class GameController {
 
 	
 
-//	@CrossOrigin(origins = "http://localhost")
-//    @DeleteMapping("/shops/{shopId}/pictures")
-//    public void deleteAllPicturesByShopId(@PathVariable (value = "shopId") Long shopId) {
-//        
-//	pictureRepository.deleteAll(pictureRepository.findByShopId(shopId, null));
-//        
-//    }
+	@CrossOrigin(origins = "http://localhost")
+    @DeleteMapping("/players/{playerId}/games")
+    public void deleteAllGamesByPlayerId(@PathVariable (value = "playerId") Long playerId) {
+        
+	gameRepository.deleteAll(gameRepository.findByPlayerId(playerId, null));
+       //POSAR RATE A NULL:
+    Player player = playerRepository.getOne(playerId);
+    player.setSuccessRate(0);
+    playerRepository.save(player);
+    }
 
 		
 	

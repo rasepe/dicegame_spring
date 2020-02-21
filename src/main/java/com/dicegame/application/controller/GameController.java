@@ -81,7 +81,9 @@ public class GameController {
           //  shop.setNumPictures(shop.getNumPictures()+1);
      	player.setHasGames(true); 
      	
-            return gameRepository.save(game);
+            //return gameRepository.save(game);
+     	gameRepository.save(game);
+     	return game;
         }).orElseThrow(() -> new ResourceNotFoundException("PlayerId " + playerId + " not found"));
 		
 		

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import javax.validation.Valid;
 
@@ -61,7 +62,7 @@ public class PlayerController {
     
     
     @GetMapping("/players/ranking/loser")
-    public Player getLoserRanking(Pageable pageable) {
+    public ArrayList<Player> getLoserRanking(Pageable pageable) {
        // return playerRepository.findAll(pageable);
         
         playerRepository.findAll(pageable).getNumberOfElements();
@@ -71,7 +72,7 @@ public class PlayerController {
         double minimum = 1000;
        // long loserId;
         Player loser = null;
-        
+        ArrayList<Player> losers = new ArrayList<Player>(); 
         for (int i=0; i<playerRepository.findAll(pageable).getNumberOfElements(); i++) {
 //        	if (gameRepository.findAll(pageable).getContent().get(i).isHasWon()) {
 //        		addition +=100;
@@ -83,6 +84,15 @@ public class PlayerController {
             		minimum=playeraverage;
             		//loserId = playerRepository.findAll(pageable).getContent().get(i).getId();
             		loser = playerRepository.findAll(pageable).getContent().get(i);
+            		if(losers.size() > 0 ) {
+           			 losers.remove( losers.size() - 1 );
+           		}           
+           		losers.add(loser);
+            		} else if (minimum==playeraverage) {
+            			minimum=playeraverage;
+                		//loserId = playerRepository.findAll(pageable).getContent().get(i).getId();
+                		loser = playerRepository.findAll(pageable).getContent().get(i);
+                		losers.add(loser);
             		}
         		
         	}
@@ -93,14 +103,14 @@ public class PlayerController {
         
        // double average = addition / gameRepository.findAll(pageable).getNumberOfElements();
         
-        return loser;
+        return losers;
         
     }
     
     
     
     @GetMapping("/players/ranking/winner")
-    public Player getWinnerRanking(Pageable pageable) {
+    public ArrayList<Player> getWinnerRanking(Pageable pageable) {
        // return playerRepository.findAll(pageable);
         
         playerRepository.findAll(pageable).getNumberOfElements();
@@ -110,6 +120,7 @@ public class PlayerController {
         double maximum = 0;
        // long loserId;
         Player winner = null;
+        ArrayList<Player> winners = new ArrayList<Player>(); 
         
         for (int i=0; i<playerRepository.findAll(pageable).getNumberOfElements(); i++) {
 //        	if (gameRepository.findAll(pageable).getContent().get(i).isHasWon()) {
@@ -122,6 +133,15 @@ public class PlayerController {
             		maximum=playeraverage;
             		//loserId = playerRepository.findAll(pageable).getContent().get(i).getId();
             		winner = playerRepository.findAll(pageable).getContent().get(i);
+            		if(winners.size() > 0 ) {
+            			 winners.remove( winners.size() - 1 );
+            		}           
+            		winners.add(winner);
+            		} else if (maximum == playeraverage) {
+            			maximum=playeraverage;
+                		//loserId = playerRepository.findAll(pageable).getContent().get(i).getId();
+                		winner = playerRepository.findAll(pageable).getContent().get(i);
+                		winners.add(winner);
             		}
         		
         	}
@@ -132,7 +152,7 @@ public class PlayerController {
         
        // double average = addition / gameRepository.findAll(pageable).getNumberOfElements();
         
-        return winner;
+        return winners;
         
     }
 	
@@ -154,9 +174,10 @@ public class PlayerController {
     	  if (player.getName()=="") {
               player.setName(null);
               };
-        return playerRepository.save(player);
-    	 
-    	 
+       // return playerRepository.save(player);
+              playerRepository.save(player);
+              return playerRepository.findAll().get(playerRepository.findAll().size()-1);
+               
     }
 
 //    @CrossOrigin(origins = "http://localhost")

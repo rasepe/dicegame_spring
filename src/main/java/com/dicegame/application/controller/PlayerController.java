@@ -54,7 +54,7 @@ public class PlayerController {
 		}
 
 
-		double average = addition / gameRepository.findAll().size();
+		double average = Math.round(addition*100 / gameRepository.findAll().size()) / 100d; // ;
 
 		return average;
 

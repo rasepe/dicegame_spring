@@ -46,4 +46,10 @@ public abstract class AuditModel implements Serializable {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+    
+    
 }

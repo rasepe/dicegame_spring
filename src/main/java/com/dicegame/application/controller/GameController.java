@@ -70,7 +70,7 @@ public class GameController {
 				points += 100;
 			}
 
-			successRate = points / (gamesByPlayer.size()+1);
+			successRate = Math.round((points / (gamesByPlayer.size()+1)) * 100) / 100d;
 
 			// 	game.getPlayer().setSuccessRate(successRate);
 			player.setSuccessRate(successRate);
